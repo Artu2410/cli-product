@@ -1,120 +1,78 @@
-# CLI - Gestión de Productos
+CLI - Gestión de Productos
 
 Herramienta de línea de comandos (CLI) desarrollada en Node.js para gestionar productos de una tienda en línea utilizando la API de FakeStore.
 
----
+# Descripción
 
-## 📌 Descripción
+Este proyecto permite interactuar con una API externa para realizar operaciones básicas sobre productos directamente desde la terminal.
 
-Este proyecto permite interactuar con una API externa para realizar operaciones básicas sobre productos, directamente desde la terminal.
+# Funcionalidades:
 
-Funcionalidades implementadas:
+* Obtener todos los productos
+* Obtener un producto por ID
+* Crear un nuevo producto
+* Eliminar un producto
 
- - Obtener todos los productos
- - Obtener un producto por ID
- - Crear un nuevo producto
- - Eliminar un producto
+# Tecnologías utilizadas
 
----
+* Node.js
+* JavaScript (ESModules)
+* node-fetch
+* API: https://fakestoreapi.com
 
-##  Tecnologías utilizadas
-
- Node.js
- JavaScript (ESModules)
- node-fetch
- API: https://fakestoreapi.com
-
----
-
-## Instalación
+# Instalación
 
 1. Clonar el repositorio o descargar el proyecto
-
 2. Instalar dependencias:
 
-```bash
-npm install
-```
+ * npm install
 
----
+# Uso
 
-##  Uso
+El programa se ejecuta desde la terminal con el siguiente formato:
 
-El programa se ejecuta desde la terminal utilizando el siguiente formato:
-
-```bash
-npm run start <METHOD> <RESOURCE> [DATA]
-```
-
----
+ * npm run start <METHOD> <RESOURCE> [DATA]
 
 ## Comandos disponibles
 
-### Obtener todos los productos
-
-```bash
-npm run start GET products
-```
-
----
-
-### Obtener un producto por ID
-
-```bash
-npm run start GET products/1
-```
-
----
-
-### Crear un nuevo producto
-
-```bash
-npm run start POST products <title> <price> <category>
-```
+# Obtener todos los productos
+ * npm run start GET products
+# Obtener un producto por ID
+ * npm run start GET products/1
+# Crear un nuevo producto
+ * npm run start POST products <title> <price> <category>
 
 Ejemplo:
 
-```bash
-npm run start POST products silla 15000 rehabilitacion
-```
+ * npm run start POST products silla 15000 rehabilitacion
 
----
+# Eliminar un producto
 
-### Eliminar un producto
-
-```bash
-npm run start DELETE products/<id>
-```
+ * npm run start DELETE products/<id>
 
 Ejemplo:
 
-```bash
-npm run start DELETE products/3
-```
+ * npm run start DELETE products/3
 
----
+# Funcionamiento
 
-## Funcionamiento
+El programa utiliza process.argv para capturar los comandos ingresados desde la terminal y ejecutar diferentes acciones según el método:
 
-El programa utiliza `process.argv` para capturar los comandos ingresados desde la terminal y ejecuta distintas acciones según el método (GET, POST, DELETE).
+ * GET
+ * POST
+ * DELETE
 
-Las peticiones a la API se realizan de forma asíncrona utilizando `fetch` con `async/await`.
+Las peticiones a la API se realizan de forma asíncrona utilizando fetch con async/await.
 
----
-
-## Notas
-
-Si no se ingresan comandos válidos, el programa mostrará un mensaje de error.
-Los datos enviados en POST deben incluir título, precio y categoría.
-
----
-
-## Autor
+# Notas
+ * Si se ingresan comandos inválidos, el programa mostrará un mensaje de error.
+ * Para crear un producto (POST), se deben ingresar: título, precio y categoría.
+# Ejemplo de ejecución
+  npm run start GET products
+# Autor
 
 Jose Arturo Azocar Perez
 
----
-
-## Licencia
+# Licencia
 
 MIT
