@@ -1,78 +1,114 @@
-CLI - Gestión de Productos
+# Catálogo de Productos de Rehabilitación
 
-Herramienta de línea de comandos (CLI) desarrollada en Node.js para gestionar productos de una tienda en línea utilizando la API de FakeStore.
+API REST para administrar productos de rehabilitación con Firebase Firestore y autenticación JWT.
 
-# Descripción
+## Estructura del proyecto
 
-Este proyecto permite interactuar con una API externa para realizar operaciones básicas sobre productos directamente desde la terminal.
+```text
+cli-product/
+├── src/
+│   ├── config/
+│   │   └── firebase.js
+│   ├── controllers/
+│   │   ├── auth.controller.js
+│   │   └── product.controller.js
+│   ├── middlewares/
+│   │   └── auth.middleware.js
+│   ├── models/
+│   │   └── Product.js
+│   ├── routes/
+│   │   ├── auth.routes.js
+│   │   └── product.routes.js
+│   ├── data/
+│   │   └── rehabilitation-products.js
+│   └── seeders/
+│       └── product.seeder.js
+├── .env
+├── index.js
+├── package.json
+└── README.md
+```
 
-# Funcionalidades:
+## Instalación
 
-* Obtener todos los productos
-* Obtener un producto por ID
-* Crear un nuevo producto
-* Eliminar un producto
+1. Clona el repositorio.
+2. Ejecuta:
 
-# Tecnologías utilizadas
+```bash
+npm install
+```
 
-* Node.js
-* JavaScript (ESModules)
-* node-fetch
-* API: https://fakestoreapi.com
+3. Crea un archivo `.env` en la raíz con tus credenciales de Firebase y la clave JWT.
 
-# Instalación
+## Variables de entorno
 
-1. Clonar el repositorio o descargar el proyecto
-2. Instalar dependencias:
+```env
+PORT=3000
+JWT_SECRET=ClaveSuperSecretaDeTechLab2026
 
- * npm install
+FIREBASE_API_KEY=tu_api_key_aqui
+FIREBASE_AUTH_DOMAIN=tu-proyecto.firebaseapp.com
+FIREBASE_PROJECT_ID=tu-proyecto-id
+FIREBASE_STORAGE_BUCKET=tu-proyecto.appspot.com
+FIREBASE_MESSAGING_SENDER_ID=tu_sender_id
+FIREBASE_APP_ID=tu_app_id
+```
 
-# Uso
+## Scripts
 
-El programa se ejecuta desde la terminal con el siguiente formato:
+```bash
+npm run start
+npm run seed:products
+```
 
- * npm run start <METHOD> <RESOURCE> [DATA]
+`npm run seed:products` inserta productos de rehabilitación base en Firestore usando la colección `products`.
 
-## Comandos disponibles
+## Productos incluidos en el seeder
 
-# Obtener todos los productos
- * npm run start GET products
-# Obtener un producto por ID
- * npm run start GET products/1
-# Crear un nuevo producto
- * npm run start POST products <title> <price> <category>
+- Mini bosu
+- Pelota de rehabilitación
+- Set de bandas de tela
 
-Ejemplo:
+## Rutas disponibles
 
- * npm run start POST products silla 15000 rehabilitacion
+### Autenticación
 
-# Eliminar un producto
+`POST /api/auth/login`
 
- * npm run start DELETE products/<id>
+Body:
 
-Ejemplo:
+```json
+{
+  "email": "user@email.com",
+  "password": "strongPass123"
+}
+```
 
- * npm run start DELETE products/3
+### Productos
 
-# Funcionamiento
+- `GET /api/products`
+- `GET /api/products/:id`
+- `POST /api/products` (requiere JWT)
+- `PUT /api/products/:id` (requiere JWT)
+- `DELETE /api/products/:id` (requiere JWT)
 
-El programa utiliza process.argv para capturar los comandos ingresados desde la terminal y ejecutar diferentes acciones según el método:
+Ejemplo para crear un producto:
 
- * GET
- * POST
- * DELETE
+```json
+{
+  "name": "Mini bosu",
+  "description": "Producto para mejorar equilibrio y estabilidad.",
+  "price": 35000,
+  "category": "rehabilitación",
+  "stock": 10
+}
+```
 
-Las peticiones a la API se realizan de forma asíncrona utilizando fetch con async/await.
+> `GET` es público. `POST`, `PUT` y `DELETE` requieren el header `Authorization: Bearer <token>`.
 
-# Notas
- * Si se ingresan comandos inválidos, el programa mostrará un mensaje de error.
- * Para crear un producto (POST), se deben ingresar: título, precio y categoría.
-# Ejemplo de ejecución
-  npm run start GET products
-# Autor
+## Notas
 
-Jose Arturo Azocar Perez
-
-# Licencia
-
-MIT
+- `src/models/Product.js` gestiona el acceso a Firestore.
+- `src/controllers/` define la lógica de las APIs.
+- `src/middlewares/auth.middleware.js` protege las rutas con JWT.
+- `index.js` arranca el servidor y configura Express.
