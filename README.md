@@ -1,4 +1,4 @@
-# API RESTfull
+# API REST
 
 API REST para gestionar productos de rehabilitación con Firebase Firestore y autenticación JWT.
 
