@@ -31,24 +31,36 @@ export const ProductService = {
 
   async createProduct(data) {
     if (!data || typeof data !== "object") {
-      const error = new Error("Datos inválidos: se requiere un objeto con name, price y category");
-      error.status = 400;
+      const error = new Error("Datos inválidos: el cuerpo debe ser un objeto con name, price y categoria");
+      error.status = 422;
       throw error;
     }
 
     const name = String(data.name || "").trim();
-    const category = String(data.category || "").trim();
-    const price = Number(data.price);
+    const categoria = String(data.categoria || "").trim();
+    const price = data.price !== undefined && data.price !== null ? Number(data.price) : NaN;
 
-    if (!name || !category || data.price === undefined || data.price === null) {
-      const error = new Error("Argumentos faltantes: name, price y category son requeridos");
-      error.status = 400;
+    if (!name) {
+      const error = new Error("El campo name es requerido");
+      error.status = 422;
+      throw error;
+    }
+
+    if (data.price === undefined || data.price === null) {
+      const error = new Error("El campo price es requerido");
+      error.status = 422;
+      throw error;
+    }
+
+    if (!categoria) {
+      const error = new Error("El campo categoria es requerido");
+      error.status = 422;
       throw error;
     }
 
     if (Number.isNaN(price) || price < 0) {
-      const error = new Error("El precio debe ser un número válido mayor o igual a cero");
-      error.status = 400;
+      const error = new Error("El campo price debe ser un número válido mayor o igual a cero");
+      error.status = 422;
       throw error;
     }
 
@@ -62,7 +74,7 @@ export const ProductService = {
     return await createProduct({
       name,
       price,
-      category,
+      categoria,
       stock,
       description: data.description || "",
     });
@@ -83,7 +95,7 @@ export const ProductService = {
 
     const sanitizedUpdates = {};
     if (updates.name !== undefined) sanitizedUpdates.name = String(updates.name).trim();
-    if (updates.category !== undefined) sanitizedUpdates.category = String(updates.category).trim();
+    if (updates.categoria !== undefined) sanitizedUpdates.categoria = String(updates.categoria).trim();
     if (updates.price !== undefined) {
       const priceValue = Number(updates.price);
       if (Number.isNaN(priceValue) || priceValue < 0) {

@@ -1,46 +1,19 @@
-# Catálogo de Productos de Rehabilitación
+# API RESTfull
 
-API REST para administrar productos de rehabilitación con Firebase Firestore y autenticación JWT.
-
-## Estructura del proyecto
-
-```text
-cli-product/
-├── src/
-│   ├── config/
-│   │   └── firebase.js
-│   ├── controllers/
-│   │   ├── auth.controller.js
-│   │   └── product.controller.js
-│   ├── middlewares/
-│   │   └── auth.middleware.js
-│   ├── models/
-│   │   └── Product.js
-│   ├── routes/
-│   │   ├── auth.routes.js
-│   │   └── product.routes.js
-│   ├── data/
-│   │   └── rehabilitation-products.js
-│   └── seeders/
-│       └── product.seeder.js
-├── .env
-├── index.js
-├── package.json
-└── README.md
-```
+API REST para gestionar productos de rehabilitación con Firebase Firestore y autenticación JWT.
 
 ## Instalación
 
 1. Clona el repositorio.
-2. Ejecuta:
+2. Instala dependencias:
 
 ```bash
 npm install
 ```
 
-3. Crea un archivo `.env` en la raíz con tus credenciales de Firebase y la clave JWT.
+3. Copia `.env-example` a `.env` y completa las variables de Firebase y JWT.
 
-## Variables de entorno
+## Configuración de entorno
 
 ```env
 PORT=3000
@@ -61,21 +34,166 @@ npm run start
 npm run seed:products
 ```
 
-`npm run seed:products` inserta productos de rehabilitación base en Firestore usando la colección `products`.
+- `npm run start`: inicia el servidor en `localhost:3000`
+- `npm run seed:products`: carga productos iniciales de rehabilitación en Firestore
 
-## Productos incluidos en el seeder
+## Create Product
 
-- Mini bosu
-- Pelota de rehabilitación
-- Set de bandas de tela
+method: POST
 
-## Rutas disponibles
+endpoint: `/api/products`
 
-### Autenticación
+body:
 
-`POST /api/auth/login`
+```json
+{
+  "name": "Mini bosu",
+  "description": "Producto para equilibrio y estabilidad.",
+  "price": 35000,
+  "categoria": "rehabilitación",
+  "stock": 10
+}
+```
 
-Body:
+response:
+
+```json
+{
+  "id": "abc123",
+  "name": "Mini bosu",
+  "description": "Producto para equilibrio y estabilidad.",
+  "price": 35000,
+  "categoria": "rehabilitación",
+  "stock": 10
+}
+```
+
+status: 201
+
+## Error Create Product
+
+method: POST
+
+endpoint: `/api/products`
+
+body:
+
+```json
+{
+  "name": "Mini bosu"
+}
+```
+
+response:
+
+```json
+{
+  "error": "El campo price es requerido"
+}
+```
+
+status: 422
+
+## List Products
+
+method: GET
+
+endpoint: `/api/products`
+
+response:
+
+```json
+[
+  {
+    "id": "abc123",
+    "name": "Mini bosu",
+    "description": "Producto para mejorar equilibrio y estabilidad.",
+    "price": 35000,
+    "categoria": "rehabilitación",
+    "stock": 10
+  }
+]
+```
+
+status: 200
+
+## Get Product
+
+method: GET
+
+endpoint: `/api/products/:id`
+
+response:
+
+```json
+{
+  "id": "abc123",
+  "name": "Mini bosu",
+  "description": "Producto para mejorar equilibrio y estabilidad.",
+  "price": 35000,
+  "categoria": "rehabilitación",
+  "stock": 10
+}
+```
+
+status: 200
+
+## Update Product
+
+method: PUT
+
+endpoint: `/api/products/:id`
+
+body:
+
+```json
+{
+  "price": 38000,
+  "stock": 12
+}
+```
+
+response:
+
+```json
+{
+  "message": "Producto actualizado",
+  "product": {
+    "id": "abc123",
+    "name": "Mini bosu",
+    "description": "Producto para equilibrio y estabilidad.",
+    "price": 38000,
+    "categoria": "rehabilitación",
+    "stock": 12
+  }
+}
+```
+
+status: 200
+
+## Delete Product
+
+method: DELETE
+
+endpoint: `/api/products/:id`
+
+response:
+
+```json
+{
+  "message": "Producto con ID abc123 eliminado exitosamente"
+}
+```
+
+status: 200
+
+## Auth Login
+
+method: POST
+
+endpoint: `/api/auth/login`
+
+body:
 
 ```json
 {
@@ -84,31 +202,93 @@ Body:
 }
 ```
 
-### Productos
-
-- `GET /api/products`
-- `GET /api/products/:id`
-- `POST /api/products` (requiere JWT)
-- `PUT /api/products/:id` (requiere JWT)
-- `DELETE /api/products/:id` (requiere JWT)
-
-Ejemplo para crear un producto:
+response:
 
 ```json
 {
-  "name": "Mini bosu",
-  "description": "Producto para mejorar equilibrio y estabilidad.",
-  "price": 35000,
-  "category": "rehabilitación",
-  "stock": 10
+  "message": "Login exitoso",
+  "token": "<jwt>",
+  "user": {
+    "id": 1,
+    "name": "User",
+    "email": "user@email.com",
+    "admin": true
+  }
 }
 ```
 
-> `GET` es público. `POST`, `PUT` y `DELETE` requieren el header `Authorization: Bearer <token>`.
+status: 200
+
+## Estructura del proyecto
+
+```text
+cli-product/
+├── src/
+│   ├── config/
+│   │   └── firebase.js
+│   ├── controllers/
+│   │   ├── auth.controller.js
+│   │   └── product.controller.js
+│   ├── middlewares/
+│   │   └── auth.middleware.js
+│   ├── models/
+│   │   └── Product.js
+│   ├── routes/
+│   │   ├── auth.router.js
+│   │   └── product.routes.js
+│   ├── seeders/
+│   │   └── product.seeder.js
+│   └── utils/
+│       └── token.generator.js
+├── .env-example
+├── index.js
+├── package.json
+└── README.md
+```
 
 ## Notas
 
-- `src/models/Product.js` gestiona el acceso a Firestore.
-- `src/controllers/` define la lógica de las APIs.
-- `src/middlewares/auth.middleware.js` protege las rutas con JWT.
-- `index.js` arranca el servidor y configura Express.
+- `src/models/Product.js` gestiona la integración con Firestore.
+- `src/controllers/` contiene la lógica de respuesta de las rutas.
+- `src/services/product.service.js` centraliza validaciones y operaciones de negocio.
+- `src/middlewares/auth.middleware.js` protege las rutas sensibles con JWT.
+- `index.js` arranca el servidor con Express y CORS.
+
+> El proyecto usa `name` en lugar de `title` para los productos.
+
+## Estructura del proyecto
+
+```text
+cli-product/
+├── src/
+│   ├── config/
+│   │   └── firebase.js
+│   ├── controllers/
+│   │   ├── auth.controller.js
+│   │   └── product.controller.js
+│   ├── middlewares/
+│   │   └── auth.middleware.js
+│   ├── models/
+│   │   └── Product.js
+│   ├── routes/
+│   │   ├── auth.router.js
+│   │   └── product.routes.js
+│   ├── seeders/
+│   │   └── product.seeder.js
+│   └── utils/
+│       └── token.generator.js
+├── .env-example
+├── index.js
+├── package.json
+└── README.md
+```
+
+## Notas
+
+- `src/models/Product.js` gestiona la integración con Firestore.
+- `src/controllers/` contiene la lógica de respuesta de las rutas.
+- `src/services/product.service.js` centraliza validaciones y operaciones de negocio.
+- `src/middlewares/auth.middleware.js` protege las rutas sensibles con JWT.
+- `index.js` arranca el servidor con Express y CORS.
+
+> Nota: el proyecto usa el campo `name` en lugar de `title` para los productos.

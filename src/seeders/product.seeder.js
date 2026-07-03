@@ -9,21 +9,21 @@ const productsSeeders = [
     description: "Producto de rehabilitación ideal para equilibrio y estabilidad.",
     price: 35000,
     stock: 10,
-    category: "rehabilitación",
+    categoria: "rehabilitación",
   },
   {
     name: "Pelota de rehabilitación",
     description: "Pelota suave para ejercicios de movilidad y fortalecimiento.",
     price: 9000,
     stock: 15,
-    category: "rehabilitación",
+    categoria: "rehabilitación",
   },
   {
     name: "Set de bandas de tela",
     description: "Conjunto de bandas resistentes para entrenamiento y rehabilitación.",
     price: 18000,
     stock: 20,
-    category: "rehabilitación",
+    categoria: "rehabilitación",
   },
 ];
 
